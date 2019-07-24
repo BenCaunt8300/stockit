@@ -1,12 +1,8 @@
 # stockit
 
+stockit is a python class that aids in easy prediction and alaysis of stocks
 
-This is a project ive been working on in my spare time the past 3 weeks 
-
-The goal is to eventually get the program to work with something like robinhood or stockpile in order to buy and sell stocks (stonks)
-in real time 
-
-stockit_class_sklearn.py has a class that is the regressor that uses polynomial regression
+stockit_class_sklearn.py is a class that has many of the tools needed for analysis and prediction such as polynomial regression and a moving average graph creation tool
  
 stockit_main.py takes real time data from yahoo and with a theoretical $50k and buys as much theoretical stock as it can with it 
 
