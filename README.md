@@ -20,7 +20,7 @@ this method takes in the inputs of self and index
 self is used to get the data 
 index i used to tell the program how far back you want each moving average window to go 
 
-#USAGE:
+# USAGE:
 
 get stock data with Close/close column from a csv or other file as a pandas dataframe
 ```python
