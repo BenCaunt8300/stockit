@@ -64,4 +64,11 @@ Polynomial Regressor
 
 ```
 
+moving average
+```python
 
+ #simply call the moving_avg() method of stockit
+ #index specifies the length of each window, lower = more relevant, higher = bigger picture, your choice
+ stockit.moving_avg(index = 35)
+ 
+```
