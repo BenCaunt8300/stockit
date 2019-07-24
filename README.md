@@ -10,4 +10,16 @@ stockit_class_sklearn.py has a class that is the regressor that uses polynomial 
  
 stockit_main.py takes real time data from yahoo and with a theoretical $50k and buys as much theoretical stock as it can with it 
 
-it will then use data from yahoo to buy and sell that particular stock before it predicts a climb or a fall in stock price 
+it will the use that live data from yahoo finance to allow it to calculate a potential climb or fall in stock price and then make appropriate actions on that information
+
+
+# Change Log
+
+<i>Wednesday, July 24 12:45 am (ADT)</i>
+over the past two days ive implemented a few boring general optimizations, things like variables that only need to be definded once and not in a for loop and the relatively resource intensive sklearn linearregression() class running twice for no reason 
+
+after these fixes i implemented the very popular moving average analysis technique with a method called moving_avg()
+this method takes in the inputs of self and index
+
+self is used to get the data 
+index i used to tell the program how far back you want each moving average window to go 
