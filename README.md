@@ -27,22 +27,22 @@ index i used to tell the program how far back you want each moving average windo
 #USAGE:
 
 get stock data with Close/close column from a csv or other file as a pandas dataframe
-'''python
+```python
 import pandas as pd 
 data = pd.read('example.csv')
-'''
+```
 import the stockit class from stockit_class_sklearn.py
-'''python
+```python
 from stockit_class_sklearn import stockit_class
-'''
+```
 
 then lets create an object out of stockit_class, passing it our pandas dataframe
 
-'''python
+```python
 
 stockit = stockit_class(data)
 
-'''
+```
 
 from here we can do a few things 
 
@@ -50,7 +50,7 @@ from here we can do a few things
 2. we can use the newly added (as of july 24 2019) moving average feature 
 
 Polynomial Regressor
-'''python
+```python
  #next day that we will predict the price of 
  next = len(data)+1
  #create the polynomial with stockit.train()
@@ -62,6 +62,6 @@ Polynomial Regressor
  #make prediction on the next day 
  print(stockit.predict(next))
 
-'''
+```
 
 
