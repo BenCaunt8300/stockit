@@ -23,3 +23,45 @@ this method takes in the inputs of self and index
 
 self is used to get the data 
 index i used to tell the program how far back you want each moving average window to go 
+
+#USAGE:
+
+get stock data with Close/close column from a csv or other file as a pandas dataframe
+'''python
+import pandas as pd 
+data = pd.read('example.csv')
+'''
+import the stockit class from stockit_class_sklearn.py
+'''python
+from stockit_class_sklearn import stockit_class
+'''
+
+then lets create an object out of stockit_class, passing it our pandas dataframe
+
+'''python
+
+stockit = stockit_class(data)
+
+'''
+
+from here we can do a few things 
+
+1. we can use the polynomial regression feature 
+2. we can use the newly added (as of july 24 2019) moving average feature 
+
+Polynomial Regressor
+'''python
+ #next day that we will predict the price of 
+ next = len(data)+1
+ #create the polynomial with stockit.train()
+ #we can specify the degree of the polynomial and the index
+ #the index is just how far back from the end of the data we generate the polynomial from
+ #the lower this number the more relevant it is, higher numbers may give you a better picture, dont specify or pass 0 for the entire set
+ stockit.train(degree = 10, index = 300)
+ 
+ #make prediction on the next day 
+ print(stockit.predict(next))
+
+'''
+
+
