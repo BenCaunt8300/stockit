@@ -9,31 +9,8 @@ from matplotlib.pyplot import style
 from sklearn import svm
 import math
 
-#simply finds the average of a particular index of items
-def moving_avg_func(input, index = 100):
-    try:
-        data = input.close
-    except:
 
-        try:
-            data = input.Close
-        except:
-            data = input
-
-    #length of particular index
-    len_index = index
-    #sum of particular index
-    try:
-        sum_index = sum(data.tail(index))
-    except:
-
-        sum_index = sum(data)
-
-    mean_index = sum_index/len_index
-
-    return mean_index
-
-#defines our regressor class
+#creates stockit class
 class stockit_class():
     #regressor class init function
     def __init__(self, data):
@@ -67,7 +44,7 @@ class stockit_class():
         x = self.data
         #stores mean of x as a variable
         average = mean_mad(x)
-        #creates an empty list that will hold each standard deviation
+        #creates an empty list that will hold each deviation
         devi_lst = []
         #increments through x and finds the distance between each index and the mean and appends them to 'devi_lst'
         for i in range(len(x)):
@@ -111,7 +88,7 @@ class stockit_class():
                 #the maximum index is equal to the data length
 
                 distance_back = index-i
-                x_lst.append(max-distance_back)
+                x_lst.append(max - distance_back)
 
             y_lst = y.tail(index)
 
@@ -128,20 +105,15 @@ class stockit_class():
             x = x_index
             y = y_index
 
-        #create an object out of the sklearn LinearRegression class
-        #EDIT JULY 24 2019 at 12:35 am, commenting this out because it seems to be doing absolutely nothing
-        '''
-        lin = LinearRegression()
-        lin.fit(x,y)
-        '''
+
         global poly
         poly = PolynomialFeatures(degree = degree)
         global x_poly
         x_poly = poly.fit_transform(x)
         poly.fit(x_poly, y)
-        global lin2
-        lin2 = LinearRegression()
-        lin2.fit(x_poly, y)
+        global reg
+        reg = LinearRegression()
+        reg.fit(x_poly, y)
 
     def predict(self, predictor):
         pred = predictor
@@ -150,7 +122,7 @@ class stockit_class():
         pred_poly = poly.fit_transform(pred)
         print("prediction made lol")
 
-        output = lin2.predict(pred_poly)
+        output = reg.predict(pred_poly)
         return output
 
     #moving average, input the number of time stamps with the 'index' variable
@@ -180,7 +152,7 @@ class stockit_class():
         the length of the data that is being average is decided by the index variable
 
         '''
-        def moving_avg_calc(input, index = 100):
+        def moving_avg_calc(input, index = index):
             #assigning the input variable of the functon to another called data
             data = input
 
@@ -221,6 +193,7 @@ class stockit_class():
         then we go back and average the past 20 positions from the starting variable and then save it to the list
         'moving_avg_values'
         '''
+
         for z in range(len(data)):
             #start 20 after the start of the datset
             current_pos = z+index
@@ -234,9 +207,9 @@ class stockit_class():
                 moving_avg_values.append(moving_avg_calc(index_values, index=index))
             except:
                 #dont worry about this
-                print("stuff*t happens, moving on")
+                print("stuff happens, moving on")
                 #get out of here lol
-                #basically, we've gone as far as we can, stop here, youre wasting CPU time
+                #we've gone as far as we can, stop here, youre wasting CPU time
                 break
 
         #fill in the x values for graphing
@@ -244,14 +217,17 @@ class stockit_class():
             x.append(length_mov_avg_val)
 
         #debug stuff, uncomment if you need lol
+
         '''
         print(f"len(x) = {len(x)}")
         print(f"len(moving_avg_values) = {len(moving_avg_values)}")
         '''
+
         plt.plot(x, moving_avg_values, label = "moving average")
         plt.plot(x_data_graphing, data, label = "real values")
         plt.legend()
         plt.show()
+
 def main():
 
     #creates pandas dataframe
@@ -263,6 +239,7 @@ def main():
     print("df length is: {0}".format(len(df)))
 
     stockit = stockit_class(df)
+
     def poly_regressor_demo():
         style.use('ggplot')
         stockit.train(degree = 10, index=300)
@@ -284,7 +261,7 @@ def main():
         y = y.reshape(-1,1)
         '''
 
-        predictions = lin2.predict(np.sort(x_poly, axis = 0))
+        predictions = reg.predict(np.sort(x_poly, axis = 0))
         plt.title(stock)
         plt.plot(x_index, predictions, label = "predictions")
         plt.plot(x_index, y_index, label= "real")
@@ -292,11 +269,12 @@ def main():
         plt.legend()
         plt.show()
 
-
     def moving_avg_demo():
         #call the moving average method of the stockit_class
+        plt.title(stock)
         stockit.moving_avg(index = 35)
 
     poly_regressor_demo()
+
 if __name__ == '__main__':
     main()
