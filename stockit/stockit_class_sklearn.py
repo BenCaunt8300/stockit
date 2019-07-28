@@ -6,6 +6,7 @@ from tqdm import tqdm
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from matplotlib.pyplot import style
+from statistics import mean
 from sklearn import svm
 import math
 
@@ -143,7 +144,7 @@ class stockit_class():
 
         #always document your code kids
         #oh yea, this is some moving average thing lol
-        #it goes back 20 days, finds the average, graphs it
+        #it goes back x days, finds the average, graphs it
         #pretty lame but simpler than a neural network
         # **laughs in shape errors**
         '''
@@ -152,22 +153,6 @@ class stockit_class():
         the length of the data that is being average is decided by the index variable
 
         '''
-        def moving_avg_calc(input, index = index):
-            #assigning the input variable of the functon to another called data
-            data = input
-
-            #length of particular index
-            len_index = index
-            #sum of particular index
-            try:
-                sum_index = sum(data.tail(index))
-            except:
-
-                sum_index = sum(data)
-
-            mean_index = sum_index/len_index
-
-            return mean_index
 
         data = self.data
 
@@ -203,14 +188,14 @@ class stockit_class():
                 for y in range(0,index):
                     print(f"current_pos-x == {current_pos-y}")
                     index_values.append(data[current_pos-y])
-                print(f"moving_avg_func(index_values) == {moving_avg_func(index_values)} ")
-                moving_avg_values.append(moving_avg_calc(index_values, index=index))
+                print(f"mean(index_values) == {mean(index_values)} ")
+                moving_avg_values.append(mean(index_values))
             except:
                 #dont worry about this
                 print("stuff happens, moving on")
                 #get out of here lol
                 #we've gone as far as we can, stop here, youre wasting CPU time
-                break
+
 
         #fill in the x values for graphing
         for length_mov_avg_val in range(len(moving_avg_values)):
@@ -218,10 +203,9 @@ class stockit_class():
 
         #debug stuff, uncomment if you need lol
 
-        '''
         print(f"len(x) = {len(x)}")
         print(f"len(moving_avg_values) = {len(moving_avg_values)}")
-        '''
+
 
         plt.plot(x, moving_avg_values, label = "moving average")
         plt.plot(x_data_graphing, data, label = "real values")
@@ -231,7 +215,7 @@ class stockit_class():
 def main():
 
     #creates pandas dataframe
-    stock = 'ADBE.csv'
+    stock = 'NVDA.csv'
     df = pd.read_csv(stock)
     #the last index of a dataset is equal to its length - ya bois law
     max = len(df)
@@ -274,7 +258,7 @@ def main():
         plt.title(stock)
         stockit.moving_avg(index = 35)
 
-    poly_regressor_demo()
+    moving_avg_demo()
 
 if __name__ == '__main__':
     main()
