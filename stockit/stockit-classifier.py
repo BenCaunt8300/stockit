@@ -5,6 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import random
+
 stock = 'NVDA'
 df = pd.read_csv(f'{stock}.csv')
 
@@ -18,34 +19,36 @@ class classifier():
         data = np.array(data)
         data_max = len(data)
 
-        #distance back that the neural network compares for each day(100 day history in this case)
-        history_int = 100
+        #distance back that the neural network compares for each day(n day history in this case)
+        index = 10
         x = {}
         y = []
 
-        for z in range(100):
+        for z in range(index):
             x['l'+str(z)] = []
 
-        #number of times the 100 day history is calculated
-        intervals = data_max-99
+        #number of times the n day history is calculated
+        intervals = data_max-(index-1)
 
-        #the start is equal to 99 because it counts back from the start ie 99,98...1,0 to get to 100
-        start = 99
+        #the start is equal to 99 because it counts back from the start ie n-1, n-2, n-3... 
+        #TO DO *** fix this comment, i have no idea what this is saying ^^^
+
+        start = index-1
         '''
-        the list "entire_past_100" is going to store each of the past 100 values
+        the list "entire_past" is going to store each of the past n values
         it will then be used to determine the maximum value which every one of
-        the past 100 will be devided by to be normalized
+        the past n will be devided by to be normalized
         the list will then be erased
         '''
 
-        entire_past_100 = []
+        entire_past = []
         for count_1 in tqdm(range(intervals)):
-            for count_2 in range(100):
-                entire_past_100.append(99-count_2)
-            past_max = max(entire_past_100)
-            for count_len_past_100 in range(len(entire_past_100)-1):
+            for count_2 in range(index):
+                entire_past.append((index-1)-count_2)
+            past_max = max(entire_past)
+            for count_len_past in range(len(entire_past)-1):
                 #i would like to append
-                x['l'+str(count_2)].append(((entire_past_100[start-count_len_past_100])/past_max))
+                x['l'+str(count_2)].append(((entire_past[start-count_len_past])/past_max))
 
             #the neural network will work by calculating wheather the price will
             #go up or down NOT an actual price, we do this with the following code
@@ -69,24 +72,22 @@ class classifier():
             #increment the start up by one
             start += 1
         x = pd.DataFrame(list(x.items()))
-        x = np.array(x)
+        #x = np.array(x)
         y = np.array(y)
+        print(x.head())
+        x.to_csv('stockit_classifier_window.csv')
 
+'''
         #neural network stuff
         tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.05, seed=None)
 
         model = tf.keras.models.Sequential()
 
-        #add model layers
-        model.add(tf.keras.layers.Conv2D(64, kernel_size=3, activation='relu'))
-
-        model.add(tf.keras.layers.Conv2D(32, kernel_initializer='random_normal',bias_initializer='random_uniform', kernel_size=3, activation='relu'))
-
-        model.add(tf.keras.layers.Flatten())
-
-        for i in range(2):
-            model.add(tf.keras.layers.Dense(16, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'relu'))
-
+        model.add(tf.keras.layers.Dense(64, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'elu'))
+        model.add(tf.keras.layers.Dense(64, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'elu'))
+        model.add(tf.keras.layers.Dense(64, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'elu'))
+        model.add(tf.keras.layers.Dense(32, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'elu'))
+        model.add(tf.keras.layers.Dense(16, kernel_initializer='random_normal', bias_initializer='random_uniform', activation = 'elu'))
         model.add(tf.keras.layers.Dense(2, kernel_initializer='random_normal', bias_initializer='random_uniform', activation='sigmoid'))
 
         model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -99,7 +100,7 @@ class classifier():
         # serialize weights to HDF5
         model.save_weights("model.h5")
         print("Saved model to disk")
-
+'''
 
 def main():
     stockit = classifier(df)
@@ -108,3 +109,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ 
