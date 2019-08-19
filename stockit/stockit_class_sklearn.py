@@ -65,7 +65,7 @@ class stockit_class():
 
             y = data
             #creates the x or independed variable
-            for i in tqdm(range(0,len(data))):
+            for i in tqdm(range(len(data))):
                 x.append(i)
 
             x = np.array(x)
@@ -90,8 +90,11 @@ class stockit_class():
 
                 distance_back = index-i
                 x_lst.append(max - distance_back)
-
-            y_lst = y.tail(index)
+            try:
+                y_lst = y.tail(index)
+            except:
+                y_lst = pd.DataFrame(y)
+                y_lst = y_lst.tail(index)
 
             global x_index
             global y_index
@@ -125,9 +128,64 @@ class stockit_class():
 
         output = reg.predict(pred_poly)
         return output
+    #uses moving average in combination with polynomial regression
+    #creates dataset of the moving average values then applies polynomial regression
+    def MA_reg(self, reg_degree = 10, reg_index = 0, MA_index = 100):
+        data = self.data
+
+        '''
+        MOVING AVERAGE
+
+        basically same as the real moving average method
+        '''
+        #for graphing the real price i think lol
+        x_data_graphing = []
+        for data_len in range(len(data)):
+            x_data_graphing.append(data_len)
+
+
+        #calculate moving average for duration of the thing
+
+        #list of all the moving average values
+        moving_avg_values = []
+        #fill the first 'range(index)' with 0s because why not lol
+        for fillerboi in range(MA_index):
+            moving_avg_values.append(0)
+
+        '''
+        here is where we calculate the moving average for every 'window' of the dataset
+        basically we start with the counter variable 'z' + index to get the starting position
+        then we go back and average the past 20 positions from the starting variable and then save it to the list
+        'moving_avg_values'
+        '''
+
+        for z in range(len(data)):
+            #start 20 after the start of the datset
+            current_pos = z+MA_index
+            #holds the values of every 20 data points
+            try:
+                index_values = []
+                for y in range(0,MA_index):
+                    print(f"current_pos-x == {current_pos-y}")
+                    index_values.append(data[current_pos-y])
+                print(f"mean(index_values) == {mean(index_values)} ")
+                moving_avg_values.append(mean(index_values))
+            except:
+                #dont worry about this
+                print("stuff happens, moving on")
+                #get out of here lol
+                #we've gone as far as we can, stop here, youre wasting CPU time
+
+        self.data = moving_avg_values
+        '''
+        polynomial regression
+        '''
+
+        #train the poly regressor on the moving average values
+        self.train(degree = reg_degree, index = reg_index)
 
     #moving average, input the number of time stamps with the 'index' variable
-    def moving_avg(self, index = 100):
+    def moving_avg(self, index = 100, show_plt = True):
 
         '''
         /**
@@ -162,7 +220,6 @@ class stockit_class():
             x_data_graphing.append(data_len)
 
         x = []
-        stock_price = []
 
         #calculate moving average for duration of the thing
 
@@ -207,16 +264,20 @@ class stockit_class():
         print(f"len(moving_avg_values) = {len(moving_avg_values)}")
 
 
-        plt.plot(x, moving_avg_values, label = "moving average")
+        plt.plot(x, moving_avg_values, label = f"moving average {index}")
         plt.plot(x_data_graphing, data, label = "real values")
-        plt.legend()
-        plt.show()
+
+        if show_plt:
+            plt.legend()
+            plt.show()
 
 def main():
 
     #creates pandas dataframe
-    stock = 'NVDA.csv'
+    stock = 'AMD.csv'
+
     df = pd.read_csv(stock)
+    df = df.Close
     #the last index of a dataset is equal to its length - ya bois law
     max = len(df)
     #prints the length of the dataset
@@ -231,23 +292,9 @@ def main():
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-
-        #creates the x or independed variable
-
-        '''
-        for i in tqdm(range(0,len(df))):
-            x.append(i)
-        x = np.array(x)
-        y = np.array(y)
-
-        #reshape data
-        x = x.reshape(-1,1)
-        y = y.reshape(-1,1)
-        '''
-
         predictions = reg.predict(np.sort(x_poly, axis = 0))
         plt.title(stock)
-        plt.plot(x_index, predictions, label = "predictions")
+        plt.plot(x_index, predictions, label = "poly reg predictions")
         plt.plot(x_index, y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
         plt.legend()
@@ -256,9 +303,54 @@ def main():
     def moving_avg_demo():
         #call the moving average method of the stockit_class
         plt.title(stock)
-        stockit.moving_avg(index = 35)
+        stockit.moving_avg(index = 9)
 
-    moving_avg_demo()
+    def moving_avg_poly_reg_demo():
+        style.use('ggplot')
+        stockit.MA_reg(reg_degree=10, MA_index=9, reg_index=300)
+    	#asks the model to train up to 3000 and make a prediction on 4000
+        point_in_question = max+1
+        point_prediction = stockit.predict(point_in_question)
+        print(point_prediction)
+
+        predictions = reg.predict(np.sort(x_poly, axis = 0))
+        #x values for graphing
+
+        #x_index = []
+        #for current_index_x in range(len(predictions)):
+            #x_index.append(current_index_x)
+
+        #true y values for graphing
+
+        y_index = []
+        for index_y in range(len(df)):
+            y_index.append(df[index_y])
+        plt.title(stock)
+        plt.plot(x_index, predictions, label = "MA reg predictions")
+        plt.plot(x_index, y_index, label= "real")
+        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}] (MA reg)'.format(point_in_question))
+        plt.legend()
+        plt.show()
+
+
+    def stockit_demo():
+        style.use('ggplot')
+        stockit.train(degree = 10, index=300)
+        point_in_question = max+1
+        point_prediction = stockit.predict(point_in_question)
+        print(point_prediction)
+
+        #creates the x or independed variable
+
+        predictions = reg.predict(np.sort(x_poly, axis = 0))
+        plt.title(stock)
+        plt.plot(x_index, predictions, label = "polynomial predictions")
+        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
+        stockit.moving_avg(index = 9, show_plt = False)
+        stockit.moving_avg(index = 25, show_plt = False)
+        stockit.moving_avg(index = 50, show_plt = False)
+        stockit.moving_avg(index = 100, show_plt = True)
+
 
 if __name__ == '__main__':
     main()
