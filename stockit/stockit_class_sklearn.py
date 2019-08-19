@@ -56,7 +56,7 @@ class stockit_class():
         return mean_mad(devi_lst)
 
     #training function
-    def train(self, degree, index = 0):
+    def train(self, degree = 10, index = 0):
         data = self.data
 
         #if index is equal to 0 then do things as normally
