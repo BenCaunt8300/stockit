@@ -135,7 +135,6 @@ class stockit_class():
 
         '''
         MOVING AVERAGE
-
         basically same as the real moving average method
         '''
         #for graphing the real price i think lol
@@ -209,7 +208,6 @@ class stockit_class():
         basically this function takes in the input of a list and finds the average of it,
         the only difference from the standard mean function is it has the optimization of not having to calculate the length of the datset each time
         the length of the data that is being average is decided by the index variable
-
         '''
 
         data = self.data
@@ -274,10 +272,10 @@ class stockit_class():
 def main():
 
     #creates pandas dataframe
-    stock = 'AMD.csv'
+    stock = 'NVDA.csv'
 
     df = pd.read_csv(stock)
-    df = df.Close
+    df = df.close
     #the last index of a dataset is equal to its length - ya bois law
     max = len(df)
     #prints the length of the dataset
@@ -351,6 +349,7 @@ def main():
         stockit.moving_avg(index = 50, show_plt = False)
         stockit.moving_avg(index = 100, show_plt = True)
 
+    moving_avg_poly_reg_demo()
 
 if __name__ == '__main__':
     main()
