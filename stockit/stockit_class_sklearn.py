@@ -305,7 +305,7 @@ def main():
 
     def moving_avg_poly_reg_demo():
         style.use('ggplot')
-        stockit.MA_reg(reg_degree=20, MA_index=100, reg_index=300)
+        stockit.MA_reg(reg_degree=10, MA_index=100, reg_index=300)
     	#asks the model to train up to 3000 and make a prediction on 4000
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
