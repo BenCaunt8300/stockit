@@ -158,22 +158,23 @@ class stockit_class():
         'moving_avg_values'
         '''
 
-        for z in range(len(data)):
+        for z in tqdm(range(len(data))):
             #start 20 after the start of the datset
             current_pos = z+MA_index
             #holds the values of every 20 data points
             try:
                 index_values = []
                 for y in range(0,MA_index):
-                    print(f"current_pos-x == {current_pos-y}")
+                    #print(f"current_pos-x == {current_pos-y}")
                     index_values.append(data[current_pos-y])
-                print(f"mean(index_values) == {mean(index_values)} ")
+                #print(f"mean(index_values) == {mean(index_values)} ")
                 moving_avg_values.append(mean(index_values))
             except:
                 #dont worry about this
-                print("stuff happens, moving on")
+                #print("stuff happens, moving on")
                 #get out of here lol
                 #we've gone as far as we can, stop here, youre wasting CPU time
+                pass
 
         self.data = moving_avg_values
         '''
@@ -233,24 +234,23 @@ class stockit_class():
         then we go back and average the past 20 positions from the starting variable and then save it to the list
         'moving_avg_values'
         '''
-
-        for z in range(len(data)):
+        for z in tqdm(range(len(data))):
             #start 20 after the start of the datset
             current_pos = z+index
             #holds the values of every 20 data points
             try:
                 index_values = []
                 for y in range(0,index):
-                    print(f"current_pos-x == {current_pos-y}")
+                    #print(f"current_pos-x == {current_pos-y}")
                     index_values.append(data[current_pos-y])
-                print(f"mean(index_values) == {mean(index_values)} ")
+                #print(f"mean(index_values) == {mean(index_values)} ")
                 moving_avg_values.append(mean(index_values))
             except:
                 #dont worry about this
-                print("stuff happens, moving on")
+                #print("stuff happens, moving on")
                 #get out of here lol
                 #we've gone as far as we can, stop here, youre wasting CPU time
-
+                pass
 
         #fill in the x values for graphing
         for length_mov_avg_val in range(len(moving_avg_values)):
@@ -258,8 +258,8 @@ class stockit_class():
 
         #debug stuff, uncomment if you need lol
 
-        print(f"len(x) = {len(x)}")
-        print(f"len(moving_avg_values) = {len(moving_avg_values)}")
+        #print(f"len(x) = {len(x)}")
+        #print(f"len(moving_avg_values) = {len(moving_avg_values)}")
 
 
         plt.plot(x, moving_avg_values, label = f"moving average {index}")
@@ -305,7 +305,7 @@ def main():
 
     def moving_avg_poly_reg_demo():
         style.use('ggplot')
-        stockit.MA_reg(reg_degree=10, MA_index=9, reg_index=300)
+        stockit.MA_reg(reg_degree=20, MA_index=100, reg_index=300)
     	#asks the model to train up to 3000 and make a prediction on 4000
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
@@ -323,6 +323,9 @@ def main():
         y_index = []
         for index_y in range(len(df)):
             y_index.append(df[index_y])
+        #trim y_index to be the same length as x_index
+        y_index = pd.DataFrame(y_index)
+        y_index = y_index.tail(len(x_index))
         plt.title(stock)
         plt.plot(x_index, predictions, label = "MA reg predictions")
         plt.plot(x_index, y_index, label= "real")
