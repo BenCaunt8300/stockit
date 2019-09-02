@@ -19,6 +19,10 @@ this method takes in the inputs of self and index
 
 self is used to get the data 
 index i used to tell the program how far back you want each moving average window to go 
+<i>Monday, September 2 12:00am (est)</i>
+train_poly replaces the previous train method 
+new method known as train_linear arrived 
+
 
 # USAGE:
 
@@ -53,7 +57,7 @@ Polynomial Regressor
  #we can specify the degree of the polynomial and the index
  #the index is just how far back from the end of the data we generate the polynomial from
  #the lower this number the more relevant it is, higher numbers may give you a better picture, dont specify or pass 0 for the entire set
- stockit.train(degree = 10, index = 300)
+ stockit.train_poly(degree = 10, index = 300)
  
  #make prediction on the next day 
  print(stockit.predict(next))
