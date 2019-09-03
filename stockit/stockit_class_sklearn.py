@@ -25,7 +25,11 @@ class stockit_class():
                 pass
 
         self.data = data
-        self.poly = True
+        #for determining if the train and predict methods are using polynomials or not
+        self.poly_reg_bool = True
+        #for polynomial features class from sklearn
+        self.poly = None
+        self.reg = None
 
     #returns mean of the dataset
     def mean(self):
@@ -57,8 +61,8 @@ class stockit_class():
         return mean_mad(devi_lst)
 
     #poly regressor training function
-    def train_poly(self, degree = 10, index = 0):
-        self.poly = True
+    def train(self, degree = 10, index = 0, poly_bool = True):
+        self.poly_reg_bool = poly_bool
         data = self.data
 
         #if index is equal to 0 then do things as normally
@@ -110,94 +114,32 @@ class stockit_class():
 
             x = x_index
             y = y_index
+            self.reg = LinearRegression()
 
+        if self.poly_reg_bool:
+            #global poly
+            self.poly = PolynomialFeatures(degree = degree)
+            global x_poly
+            x_poly = self.poly.fit_transform(x)
+            self.poly.fit(x_poly, y)
 
-        global poly
-        poly = PolynomialFeatures(degree = degree)
-        global x_poly
-        x_poly = poly.fit_transform(x)
-        poly.fit(x_poly, y)
-        global reg
-        reg = LinearRegression()
-        reg.fit(x_poly, y)
-    #linear regressor training function
-    def train_linear(self, index = 0):
-        #set poly = to false so that the predict method knows not to use the special way of accomplishing the same thing but for polynomials
-        self.poly = False
-        data = self.data
-
-        #if index is equal to 0 then do things as normally
-        if index == 0:
-            x = []
-
-            y = data
-            #creates the x or independed variable
-            for i in tqdm(range(len(data))):
-                x.append(i)
-
-            x = np.array(x)
-            y = np.array(y)
-
-            #reshape data
-            x = x.reshape(-1,1)
-            y = y.reshape(-1,1)
-
-            '''
-            if index is not equal to 0 then starting from the end of the dataset,
-            increment back for the range of the index variable
-            '''
-
-        #if the index is != to 0 then create a new dataset with the last 'index' items
-
+            self.reg.fit(x_poly, y)
         else:
-            x_lst = []
-            y_lst = []
-
-            y = data
-            max = len(y)
-            for i in tqdm(range(index)):
-                #the maximum index is equal to the data length
-
-                distance_back = index-i
-                x_lst.append(max - distance_back)
-            try:
-                y_lst = y.tail(index)
-            except:
-                y_lst = pd.DataFrame(y)
-                y_lst = y_lst.tail(index)
-
-            global x_index
-            global y_index
-
-            x_index = np.array(x_lst)
-            y_index = np.array(y_lst)
-
-            #reshape data to work with sklearn
-            x_index = x_index.reshape(-1,1)
-            y_index = y_index.reshape(-1,1)
-
-            x = x_index
-            y = y_index
-
-        global reg
-
-        reg = LinearRegression()
-        #fit regressor
-        reg.fit(x, y)
+            self.reg.fit(x,y)
 
     def predict(self, predictor):
         pred = predictor
         pred = np.array(pred)
         pred = pred.reshape(1,-1)
-        if self.poly:
-            pred_poly = poly.fit_transform(pred)
+        if self.poly_reg_bool:
+            pred_poly = self.poly.fit_transform(pred)
             pred  = pred_poly
         else:
             pass
 
         print("prediction made lol")
 
-        output = reg.predict(pred)
+        output = self.reg.predict(pred)
         return output
     #uses moving average in combination with polynomial regression
     #creates dataset of the moving average values then applies polynomial regression
@@ -252,7 +194,7 @@ class stockit_class():
         '''
 
         #train the poly regressor on the moving average values
-        self.train_poly(degree = reg_degree, index = reg_index)
+        self.train(degree = reg_degree, index = reg_index)
 
     #moving average, input the number of time stamps with the 'index' variable
     def moving_avg(self, index = 100, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
@@ -366,12 +308,12 @@ def main():
 
     def poly_regressor_demo():
         style.use('ggplot')
-        stockit.train_poly(degree = 10, index=100)
+        stockit.train(degree = 10, index=100)
     	#asks the model to train up to 3000 and make a prediction on 4000
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-        predictions = reg.predict(np.sort(x_poly, axis = 0))
+        predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
         plt.title(stock)
         plt.plot(x_index, predictions, label = "poly reg predictions")
         plt.plot(x_index, y_index, label= "real")
@@ -380,11 +322,11 @@ def main():
         plt.show()
     def linear_regressor_demo():
         style.use('ggplot')
-        stockit.train_linear(index=100)
+        stockit.train(index = 300, poly_bool=False)
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-        predictions = reg.predict(np.sort(x_index, axis = 0))
+        predictions = stockit.reg.predict(np.sort(x_index, axis = 0))
         plt.title(stock)
         plt.plot(x_index, predictions, label = "reg predictions")
         plt.plot(x_index, y_index, label= "real")
@@ -404,7 +346,7 @@ def main():
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
 
-        predictions = reg.predict(np.sort(x_poly, axis = 0))
+        predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
         #x values for graphing
 
         #x_index = []
@@ -426,7 +368,7 @@ def main():
 
     def stockit_demo():
         style.use('ggplot')
-        stockit.train_poly(degree = 10, index=300)
+        stockit.train(degree = 10, index=300, poly_bool=False)
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
@@ -442,7 +384,7 @@ def main():
         stockit.moving_avg(index = 50, show_plt = False)
         stockit.moving_avg(index = 100, show_plt = True)
 
-    linear_regressor_demo()
+    moving_avg_poly_reg_demo()
 
 if __name__ == '__main__':
     main()
