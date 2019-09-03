@@ -86,6 +86,7 @@ class stockit_class():
             increment back for the range of the index variable
             '''
         else:
+            #our new x and y data that is just data from the index if it does not equal 0
             x_lst = []
             y_lst = []
 
@@ -114,8 +115,11 @@ class stockit_class():
 
             x = x_index
             y = y_index
+            #creates object from sklearn's LinearRegression() class
+            #can be called outside the class with stockit_class.reg
             self.reg = LinearRegression()
-
+        #only runs if poly_reg_bool is equal to true
+        #if so polynomial regression is in use, if not it is linear regression
         if self.poly_reg_bool:
             #global poly
             self.poly = PolynomialFeatures(degree = degree)
@@ -125,11 +129,13 @@ class stockit_class():
 
             self.reg.fit(x_poly, y)
         else:
+            #poly_reg_bool is false so using linear regression
             self.reg.fit(x,y)
 
-    def predict(self, predictor):
-        pred = predictor
-        pred = np.array(pred)
+    #predict method
+    def predict(self, target):
+
+        pred = np.array(target)
         pred = pred.reshape(1,-1)
         if self.poly_reg_bool:
             pred_poly = self.poly.fit_transform(pred)
@@ -137,7 +143,7 @@ class stockit_class():
         else:
             pass
 
-        print("prediction made lol")
+        #print("prediction made lol")
 
         output = self.reg.predict(pred)
         return output
@@ -232,7 +238,7 @@ class stockit_class():
 
         x = []
 
-        #calculate moving average for duration of the thing
+        #calculate moving average for duration of the argument index
 
         #list of all the moving average values
         moving_avg_values = []
@@ -384,7 +390,7 @@ def main():
         stockit.moving_avg(index = 50, show_plt = False)
         stockit.moving_avg(index = 100, show_plt = True)
 
-    moving_avg_poly_reg_demo()
+    stockit_demo()
 
 if __name__ == '__main__':
     main()
