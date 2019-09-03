@@ -390,7 +390,7 @@ def main():
         stockit.moving_avg(index = 50, show_plt = False)
         stockit.moving_avg(index = 100, show_plt = True)
 
-    moving_avg_poly_reg_demo()
+    stockit_demo()
 
 if __name__ == '__main__':
     main()
