@@ -1,5 +1,4 @@
 '''
-* Ben Caunt (c) 2019
 * stockit_main.py
 *purpose:
     import the class from the file stockit_class_sklearn.py
