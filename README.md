@@ -23,6 +23,9 @@ index i used to tell the program how far back you want each moving average windo
 train_poly replaces the previous train method 
 new method known as train_linear arrived 
 
+<i>Monday, september 2 10:40pm (EST)</i>
+the train_poly and train_linear method are now just one method called true and you can enable
+or disable the polynomial feature with the methods argument ``` poly_bool ``` which is true by default
 
 # USAGE:
 
