@@ -60,7 +60,7 @@ Polynomial Regressor
  #we can specify the degree of the polynomial and the index
  #the index is just how far back from the end of the data we generate the polynomial from
  #the lower this number the more relevant it is, higher numbers may give you a better picture, dont specify or pass 0 for the entire set
- stockit.train_poly(degree = 10, index = 300)
+ stockit.train(degree = 10, index = 300)
  
  #make prediction on the next day 
  print(stockit.predict(next))
