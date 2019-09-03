@@ -2,7 +2,7 @@
 
 stockit is a python class that aids in easy prediction and alaysis of stocks
 
-stockit_class_sklearn.py is a class that has many of the tools needed for analysis and prediction such as polynomial regression and a moving average graph creation tool
+stockit_class.py is a class that has many of the tools needed for analysis and prediction such as polynomial regression and a moving average graph creation tool
  
 stockit_realtime.py takes real time data from yahoo and with a theoretical $50k and buys as much theoretical stock as it can with it 
 
@@ -34,9 +34,9 @@ get stock data with Close/close column from a csv or other file as a pandas data
 import pandas as pd 
 data = pd.read('example.csv')
 ```
-import the stockit class from stockit_class_sklearn.py
+import the stockit class from stockit_class.py
 ```python
-from stockit_class_sklearn import stockit_class
+from stockit_class import stockit_class
 ```
 
 then lets create an object out of stockit_class, passing it our pandas dataframe
@@ -71,7 +71,7 @@ moving average
 ```python
 
  #simply call the moving_avg() method of stockit
- #index specifies the length of each window, lower = more relevant, higher = bigger picture, your choice
+ #index specifies the length of each window, lower = closer fit to live data, higher = smoother line, your choice
  stockit.moving_avg(index = 35)
  
 ```
