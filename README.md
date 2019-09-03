@@ -4,7 +4,7 @@ stockit is a python class that aids in easy prediction and alaysis of stocks
 
 stockit_class.py is the real star of the show here.  It contains a class that has many tools needed for analysis and prediction of stock or currency prices such as regression and moving average windows.
  
-stockit_realtime.py takes real time data from yahoo and with a theoretical $50k and buys as much theoretical stock as it can with it 
+stockit_realtime.py is for experimentation and takes real time data from yahoo and with a theoretical $50k and buys as much theoretical stock as it can with it 
 
 it will the use that live data from yahoo finance to allow it to calculate a potential climb or fall in stock price and then make appropriate actions on that information
 
