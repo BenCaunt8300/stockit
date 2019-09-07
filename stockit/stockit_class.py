@@ -30,6 +30,8 @@ class stockit_class():
         #for polynomial features class from sklearn
         self.poly = None
         self.reg = None
+        self.x_index = None # graphing stuff
+        self.y_index = None #graphin stuff,
 
     #returns mean of the dataset
     def mean(self):
@@ -103,18 +105,16 @@ class stockit_class():
                 y_lst = pd.DataFrame(y)
                 y_lst = y_lst.tail(index)
 
-            global x_index
-            global y_index
 
-            x_index = np.array(x_lst)
-            y_index = np.array(y_lst)
+            self.x_index = np.array(x_lst)
+            self.y_index = np.array(y_lst)
 
             #reshape data
-            x_index = x_index.reshape(-1,1)
-            y_index = y_index.reshape(-1,1)
+            self.x_index = self.x_index.reshape(-1,1)
+            self.y_index = self.y_index.reshape(-1,1)
 
-            x = x_index
-            y = y_index
+            x = self.x_index
+            y = self.y_index
             #creates object from sklearn's LinearRegression() class
             #can be called outside the class with stockit_class.reg
             self.reg = LinearRegression()
@@ -177,20 +177,21 @@ class stockit_class():
         'moving_avg_values'
         '''
 
-        for z in range(len(data)):
+        for z in tqdm(range(len(data))):
             #start 20 after the start of the datset
             current_pos = z+MA_index
             #holds the values of every 20 data points
             try:
                 index_values = []
                 for y in range(0,MA_index):
-                    print(f"current_pos-x == {current_pos-y}")
+                    #print(f"current_pos-x == {current_pos-y}")
                     index_values.append(data[current_pos-y])
                 print(f"mean(index_values) == {mean(index_values)} ")
                 moving_avg_values.append(mean(index_values))
             except:
+                pass
                 #dont worry about this
-                print("stuff happens, moving on")
+                #print("stuff happens, moving on")
                 #get out of here lol
                 #we've gone as far as we can, stop here, youre wasting CPU time
 
@@ -203,7 +204,7 @@ class stockit_class():
         self.train(degree = reg_degree, index = reg_index)
 
     #moving average, input the number of time stamps with the 'index' variable
-    def moving_avg(self, index = 100, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
+    def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
         '''
         /**
@@ -253,20 +254,21 @@ class stockit_class():
         'moving_avg_values'
         '''
 
-        for z in range(len(data)):
+        for z in tqdm(range(len(data))):
             #start 20 after the start of the datset
             current_pos = z+index
             #holds the values of every 20 data points
             try:
                 index_values = []
                 for y in range(index):
-                    print(f"current_pos-x == {current_pos-y}")
+                    #print(f"current_pos-x == {current_pos-y}")
                     index_values.append(data[current_pos-y])
-                print(f"mean(index_values) == {mean(index_values)} ")
+                #print(f"mean(index_values) == {mean(index_values)} ")
                 moving_avg_values.append(mean(index_values))
             except:
+                pass
                 #dont worry about this
-                print("stuff happens, moving on")
+                #print("stuff happens, moving on")
                 #get out of here lol
                 #we've gone as far as we can, stop here, youre wasting CPU time
 
@@ -290,7 +292,10 @@ class stockit_class():
             x_data_graphing = x_data_graphing.tail(save_index)
 
         plt.plot(x, moving_avg_values, label = f"moving average {index}")
-        plt.plot(x_data_graphing, data, label = "real values")
+
+        #the show_real variable is a variable that when true, plots the true stock data
+        if show_real:
+            plt.plot(x_data_graphing, data, label = "real values")
 
         if show_plt:
             plt.legend()
@@ -321,8 +326,8 @@ def main():
         print(point_prediction)
         predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
         plt.title(stock)
-        plt.plot(x_index, predictions, label = "poly reg predictions")
-        plt.plot(x_index, y_index, label= "real")
+        plt.plot(self.x_index, predictions, label = "poly reg predictions")
+        plt.plot(self.x_index, self.y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
         plt.legend()
         plt.show()
@@ -332,10 +337,10 @@ def main():
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-        predictions = stockit.reg.predict(np.sort(x_index, axis = 0))
+        predictions = stockit.reg.predict(np.sort(self.x_index, axis = 0))
         plt.title(stock)
-        plt.plot(x_index, predictions, label = "reg predictions")
-        plt.plot(x_index, y_index, label= "real")
+        plt.plot(self.x_index, predictions, label = "reg predictions")
+        plt.plot(self.x_index, self.y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
         plt.legend()
         plt.show()
@@ -355,18 +360,18 @@ def main():
         predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
         #x values for graphing
 
-        #x_index = []
+        #self.x_index = []
         #for current_index_x in range(len(predictions)):
-            #x_index.append(current_index_x)
+            #self.x_index.append(current_index_x)
 
         #true y values for graphing
 
-        y_index = []
+        self.y_index = []
         for index_y in range(len(df)):
-            y_index.append(df[index_y])
+            self.y_index.append(df[index_y])
         plt.title(stock)
-        plt.plot(x_index, predictions, label = "MA reg predictions")
-        plt.plot(x_index, y_index, label= "real")
+        plt.plot(self.x_index, predictions, label = "MA reg predictions")
+        plt.plot(self.self.x_index, self.y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}] (MA reg)'.format(point_in_question))
         plt.legend()
         plt.show()
@@ -379,15 +384,17 @@ def main():
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
 
+
         #creates the x or independed variable
 
-        predictions = reg.predict(np.sort(x_poly, axis = 0))
+        predictions = stockit.reg.predict(np.sort(stockit.x_index, axis = 0))
+
+
         plt.title(stock)
-        plt.plot(x_index, predictions, label = "polynomial predictions")
-        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
-        stockit.moving_avg(index = 9, show_plt = False)
-        stockit.moving_avg(index = 25, show_plt = False)
-        stockit.moving_avg(index = 50, show_plt = False)
+        plt.plot(stockit.x_index, predictions, label = "reg predictions")
+        plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
+        stockit.moving_avg(index = 9, show_plt = False, show_real=False)
+        stockit.moving_avg(index = 50, show_plt = False, show_real=False)
         stockit.moving_avg(index = 100, show_plt = True)
 
     stockit_demo()
