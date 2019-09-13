@@ -78,7 +78,7 @@ moving average
 
 whole code, poly and MA
 
-```
+```python
 import pandas as pd 
 from stockit_class import stockit_class
 data = pd.read_csv('example.csv')
