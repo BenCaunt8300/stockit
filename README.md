@@ -75,3 +75,16 @@ moving average
  stockit.moving_avg(index = 35)
  
 ```
+
+whole code, poly and MA
+
+```
+import pandas as pd 
+from stockit_class import stockit_class
+data = pd.read_csv('example.csv')
+stockit = stockit_class(data)
+stockit.train()
+stockit.predict(100)
+stockit.moving_avg(index = 35)
+
+```
