@@ -126,8 +126,6 @@ class stockit_class():
             global x_poly
             x_poly = self.poly.fit_transform(x)
             self.poly.fit(x_poly, y)
-
-            self.reg.fit(x_poly, y)
         else:
             #poly_reg_bool is false so using linear regression
             self.reg.fit(x,y)
@@ -140,9 +138,7 @@ class stockit_class():
         if self.poly_reg_bool:
             pred_poly = self.poly.fit_transform(pred)
             pred  = pred_poly
-        else:
-            pass
-
+            
         #print("prediction made lol")
 
         output = self.reg.predict(pred)
@@ -279,8 +275,8 @@ class stockit_class():
 
         #debug stuff, uncomment if you need lol
 
-        print(f"len(x) = {len(x)}")
-        print(f"len(moving_avg_values) = {len(moving_avg_values)}")
+        #print(f"len(x) = {len(x)}")
+        #print(f"len(moving_avg_values) = {len(moving_avg_values)}")
 
         if save_plt:
             x = pd.DataFrame(x)
@@ -307,7 +303,7 @@ class stockit_class():
 def main():
 
     #creates pandas dataframe
-    stock = 'NVDA'
+    stock = 'snp500'
 
     df = pd.read_csv(f"{stock}.csv")
     #the last index of a dataset is equal to its length - ya bois law
@@ -326,8 +322,8 @@ def main():
         print(point_prediction)
         predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
         plt.title(stock)
-        plt.plot(self.x_index, predictions, label = "poly reg predictions")
-        plt.plot(self.x_index, self.y_index, label= "real")
+        plt.plot(stockit.x_index, predictions, label = "poly reg predictions")
+        plt.plot(stockit.x_index, stockit.y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
         plt.legend()
         plt.show()
@@ -337,10 +333,10 @@ def main():
         point_in_question = max+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-        predictions = stockit.reg.predict(np.sort(self.x_index, axis = 0))
+        predictions = stockit.reg.predict(np.sort(stockit.x_index, axis = 0))
         plt.title(stock)
-        plt.plot(self.x_index, predictions, label = "reg predictions")
-        plt.plot(self.x_index, self.y_index, label= "real")
+        plt.plot(stockit.x_index, predictions, label = "reg predictions")
+        plt.plot(stockit.x_index, stockit.y_index, label= "real")
         plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
         plt.legend()
         plt.show()
@@ -348,7 +344,7 @@ def main():
     def moving_avg_demo():
         #call the moving average method of the stockit_class
         plt.title(stock)
-        stockit.moving_avg(index = 9,show_plt=False,save_plt=True,name= f'{stock}.png')
+        stockit.moving_avg(index = 9, show_plt=False, save_plt=True, name= f'{stock}.png')
 
     def moving_avg_poly_reg_demo():
         style.use('ggplot')
@@ -393,8 +389,8 @@ def main():
         plt.title(stock)
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
         plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
-        stockit.moving_avg(index = 9, show_plt = False, show_real=False)
-        stockit.moving_avg(index = 50, show_plt = False, show_real=False)
+        #stockit.moving_avg(index = 9, show_plt = False, show_real=False)
+        #stockit.moving_avg(index = 50, show_plt = False, show_real=False)
         stockit.moving_avg(index = 100, show_plt = True)
 
     stockit_demo()
