@@ -143,62 +143,7 @@ class stockit_class():
 
         output = self.reg.predict(pred)
         return output
-    #uses moving average in combination with polynomial regression
-    #creates dataset of the moving average values then applies polynomial regression
-    def MA_reg(self, reg_degree = 10, reg_index = 0, MA_index = 100):
-        data = self.data
-
-        '''
-        MOVING AVERAGE
-        basically same as the real moving average method
-        '''
-        #for graphing the real price i think lol
-        x_data_graphing = []
-        for data_len in range(len(data)):
-            x_data_graphing.append(data_len)
-
-
-        #calculate moving average for duration of the thing
-
-        #list of all the moving average values
-        moving_avg_values = []
-        #fill the first 'range(index)' with 0s because why not lol
-        for fillerboi in range(MA_index):
-            moving_avg_values.append(0)
-
-        '''
-        here is where we calculate the moving average for every 'window' of the dataset
-        basically we start with the counter variable 'z' + index to get the starting position
-        then we go back and average the past 20 positions from the starting variable and then save it to the list
-        'moving_avg_values'
-        '''
-
-        for z in tqdm(range(len(data))):
-            #start 20 after the start of the datset
-            current_pos = z+MA_index
-            #holds the values of every 20 data points
-            try:
-                index_values = []
-                for y in range(0,MA_index):
-                    #print(f"current_pos-x == {current_pos-y}")
-                    index_values.append(data[current_pos-y])
-                print(f"mean(index_values) == {mean(index_values)} ")
-                moving_avg_values.append(mean(index_values))
-            except:
-                pass
-                #dont worry about this
-                #print("stuff happens, moving on")
-                #get out of here lol
-                #we've gone as far as we can, stop here, youre wasting CPU time
-
-        self.data = moving_avg_values
-        '''
-        polynomial regression
-        '''
-
-        #train the poly regressor on the moving average values
-        self.train(degree = reg_degree, index = reg_index)
-
+ 
     #moving average, input the number of time stamps with the 'index' variable
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
@@ -346,33 +291,6 @@ def main():
         plt.title(stock)
         stockit.moving_avg(index = 9, show_plt=False, save_plt=True, name= f'{stock}.png')
 
-    def moving_avg_poly_reg_demo():
-        style.use('ggplot')
-        stockit.MA_reg(reg_degree=10, MA_index=9, reg_index=300)
-        point_in_question = max+1
-        point_prediction = stockit.predict(point_in_question)
-        print(point_prediction)
-
-        predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
-        #x values for graphing
-
-        #self.x_index = []
-        #for current_index_x in range(len(predictions)):
-            #self.x_index.append(current_index_x)
-
-        #true y values for graphing
-
-        self.y_index = []
-        for index_y in range(len(df)):
-            self.y_index.append(df[index_y])
-        plt.title(stock)
-        plt.plot(self.x_index, predictions, label = "MA reg predictions")
-        plt.plot(self.self.x_index, self.y_index, label= "real")
-        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}] (MA reg)'.format(point_in_question))
-        plt.legend()
-        plt.show()
-
-
     def stockit_demo():
         style.use('ggplot')
         stockit.train(degree = 10, index=300, poly_bool=False)
@@ -389,8 +307,6 @@ def main():
         plt.title(stock)
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
         plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
-        #stockit.moving_avg(index = 9, show_plt = False, show_real=False)
-        #stockit.moving_avg(index = 50, show_plt = False, show_real=False)
         stockit.moving_avg(index = 100, show_plt = True)
 
     stockit_demo()
