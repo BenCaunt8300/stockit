@@ -40,9 +40,9 @@ get stock data with Close/close column from a csv or other file as a pandas data
 import pandas as pd 
 data = pd.read('example.csv')
 ```
-import the stockit class from stockit_class.py
+import the stockit class
 ```python
-from stockit_class import stockit_class
+from stockit import stockit_class
 ```
 
 then lets create an object out of stockit_class, passing it our pandas dataframe
