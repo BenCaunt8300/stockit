@@ -28,7 +28,7 @@ the train_poly and train_linear method are now just one method called true and y
 or disable the polynomial feature with the methods argument ``` poly_bool ``` which is true by default
 
 # Install: 
-within the stockitPackage directory run the following command:
+within the directory run the following command:
 ```
 pip3 install .
 ```
