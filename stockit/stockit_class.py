@@ -8,6 +8,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from matplotlib.pyplot import style
 from statistics import mean
 import math
+import warnings
 
 
 #creates stockit class
@@ -37,13 +38,11 @@ class stockit_class():
     def train(self, degree = 10, index = 0, poly_bool = False):
         self.poly_reg_bool = poly_bool
         data = self.data
-        print("defined self.reg")
 
         self.reg = LinearRegression()
 
         #if index is equal to 0 then do things as normally
         if index == 0:
-            print("index == 0")
             x = []
 
             y = data
@@ -63,7 +62,6 @@ class stockit_class():
             increment back for the range of the index variable
             '''
         else:
-            print("index does not equal 0")
             #our new x and y data that is just data from the index if it does not equal 0
             x_lst = []
             y_lst = []
@@ -93,13 +91,10 @@ class stockit_class():
             y = self.y_index
             #creates object from sklearn's LinearRegression() class
             #can be called outside the class with stockit_class.reg
-            print("defined self.reg")
         #only runs if poly_reg_bool is equal to true
         #if so polynomial regression is in use, if not it is linear regression
         if self.poly_reg_bool:
-            #global poly
             self.poly = PolynomialFeatures(degree = degree)
-            global x_poly
             x_poly = self.poly.fit_transform(x)
             self.poly.fit(x_poly, y)
         else:
@@ -108,7 +103,12 @@ class stockit_class():
             
     #predict method
     def predict(self, target):
-
+        # if the self.reg object is None, this means that train has not been called, therefore we should just call it anyways
+        if self.reg is None:
+            warnings.warn("""self.reg == None, this most likely means you did not call the .train() method
+            automatically calling train() method
+            manually call the train() method for added options""")
+            self.train()
         pred = np.array(target)
         pred = pred.reshape(1,-1)
         if self.poly_reg_bool:
