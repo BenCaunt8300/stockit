@@ -27,6 +27,12 @@ new method known as train_linear arrived
 the train_poly and train_linear method are now just one method called true and you can enable
 or disable the polynomial feature with the methods argument ``` poly_bool ``` which is true by default
 
+# Install: 
+within the stockitPackage directory run the following command:
+```
+pip3 install .
+```
+
 # USAGE:
 
 get stock data with Close/close column from a csv or other file as a pandas dataframe
