@@ -25,6 +25,11 @@ class stockit_class():
                 pass
 
         self.data = data
+        print("******************************************************************************")
+        print("Disclaimer: Stockit predictions are not investment advice.  They are meerly   ")
+        print("information used for educational purposes,  if used for investment, use at    ")
+        print("Ones own risk.  Thank you for using stockit.")
+        print("******************************************************************************")
         #for determining if the train and predict methods are using polynomials or not
         self.poly_reg_bool = True
         #for polynomial features class from sklearn
