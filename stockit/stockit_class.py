@@ -237,20 +237,7 @@ def main():
 
     stockit = stockit_class(df)
 
-    def poly_regressor_demo():
-        style.use('ggplot')
-        stockit.train(degree = 10, index=100)
-    	#asks the model to train up to 3000 and make a prediction on 4000
-        point_in_question = max+1
-        point_prediction = stockit.predict(point_in_question)
-        print(point_prediction)
-        predictions = stockit.reg.predict(np.sort(x_poly, axis = 0))
-        plt.title(stock)
-        plt.plot(stockit.x_index, predictions, label = "poly reg predictions")
-        plt.plot(stockit.x_index, stockit.y_index, label= "real")
-        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
-        plt.legend()
-        plt.show()
+
     def linear_regressor_demo():
         style.use('ggplot')
         stockit.train(index = 300, poly_bool=False)
