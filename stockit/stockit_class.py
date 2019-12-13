@@ -130,14 +130,7 @@ class stockit_class():
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
         '''
-        /**
-        * For the brave souls who get this far: You are the chosen ones,
-        * the valiant knights of programming who toil away, without rest,
-        * fixing our most awful code. To you, true saviors, kings of men,
-        * I say this: never gonna give you up, never gonna let you down,
-        * never gonna run around and desert you. Never gonna make you cry,
-        * never gonna say goodbye. Never gonna tell a lie and hurt you.
-        */
+        Calculates and graphs moving average given a specified index or 100 by default.  In order to be used, an instance of the stockit class must already be created.
         '''
 
         style.use("ggplot")
@@ -147,11 +140,10 @@ class stockit_class():
         #it goes back x days, finds the average, graphs it
         #pretty lame but simpler than a neural network
         # **laughs in shape errors**
-        '''
-        basically this function takes in the input of a list and finds the average of it,
-        the only difference from the standard mean function is it has the optimization of not having to calculate the length of the datset each time
-        the length of the data that is being average is decided by the index variable
-        '''
+        
+        #basically this function takes in the input of a list and finds the average of it,
+        #the only difference from the standard mean function is it has the optimization of not having to calculate the length of the datset each time
+        #the length of the data that is being average is decided by the index variable
 
         data = self.data
 
@@ -163,10 +155,9 @@ class stockit_class():
         #calculate moving average for duration of the argument index
 
         #list of all the moving average values
-        moving_avg_values = []
-        #fill the first 'range(index)' with 0s because why not lol
-        for fill in range(index):
-            moving_avg_values.append(0)
+        #fill the first 'range(index)' with 0s to graph the first part of the moving average where the full average cannot be calculated 
+        moving_avg_values = [0 for fill in range(index)]
+
 
         '''
         here is where we calculate the moving average for every 'window' of the dataset
