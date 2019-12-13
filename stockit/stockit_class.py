@@ -36,8 +36,10 @@ class stockit_class():
         
     #poly regressor training function
     def train(self, degree = 10, index = 0, poly_bool = False):
+        # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
+        if index > len(self.data):
+            raise ValueError("'index' cannot be greater than the length of your CSV file. ")
         self.poly_reg_bool = poly_bool
-        data = self.data
 
         self.reg = LinearRegression()
 
@@ -45,9 +47,9 @@ class stockit_class():
         if index == 0:
             x = []
 
-            y = data
+            y = self.data
             #creates the x or independed variable
-            for i in tqdm(range(len(data))):
+            for i in tqdm(range(len(self.data))):
                 x.append(i)
 
             x = np.array(x)
@@ -66,7 +68,8 @@ class stockit_class():
             x_lst = []
             y_lst = []
 
-            y = data
+            y = self.data
+
             max = len(y)
             for i in tqdm(range(index)):
                 #the maximum index is equal to the data length
@@ -86,7 +89,7 @@ class stockit_class():
             #reshape data
             self.x_index = self.x_index.reshape(-1,1)
             self.y_index = self.y_index.reshape(-1,1)
-
+ 
             x = self.x_index
             y = self.y_index
             #creates object from sklearn's LinearRegression() class
@@ -100,6 +103,7 @@ class stockit_class():
         else:
             #poly_reg_bool is false so using linear regression
             self.reg.fit(x,y)
+        return 1
             
     #predict method
     def predict(self, target):
@@ -149,9 +153,7 @@ class stockit_class():
         data = self.data
 
         #for graphing the real price i think lol
-        x_data_graphing = []
-        for data_len in range(len(data)):
-            x_data_graphing.append(data_len)
+        x_data_graphing = [i for i in range(len(data))]
 
         x = []
 
@@ -220,6 +222,8 @@ class stockit_class():
             plt.legend()
             plt.savefig(name, dpi = save_dpi)
 
+
+# basically a bunch of examples
 def main():
 
     #creates pandas dataframe
