@@ -84,15 +84,14 @@ moving average
  
 ```
 
-whole code, poly and MA
-
+Regressor and moving Average 
 ```python
 import pandas as pd 
 from stockit_class import stockit_class
 data = pd.read_csv('example.csv')
 stockit = stockit_class(data)
 stockit.train()
-stockit.predict(100)
+print(stockit.predict(100))
 stockit.moving_avg(index = 35)
 
 ```
