@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 from tqdm import tqdm
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from matplotlib.pyplot import style
 from statistics import mean
-import math
 import warnings
 
 
@@ -75,12 +73,12 @@ class stockit_class():
 
             y = self.data
 
-            max = len(y)
+            data_len = len(y)
             for i in tqdm(range(index)):
                 #the maximum index is equal to the data length
 
                 distance_back = index-i
-                x_lst.append(max - distance_back)
+                x_lst.append(data_len - distance_back)
             try:
                 y_lst = y.tail(index)
             except:
@@ -236,7 +234,7 @@ def main():
 
     df = pd.read_csv("NVDA.csv")
     #the last index of a dataset is equal to its length - ya bois law
-    max = len(df)
+    data_len = len(df)
     #prints the length of the dataset
     print("df length is: {0}".format(len(df)))
 
@@ -246,7 +244,7 @@ def main():
     def linear_regressor_demo():
         style.use('ggplot')
         stockit.train(index = 300, poly_bool=False)
-        point_in_question = max+1
+        point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
         predictions = stockit.reg.predict(np.sort(stockit.x_index, axis = 0))
@@ -265,7 +263,7 @@ def main():
     def stockit_demo():
         style.use('ggplot')
         stockit.train(degree = 10, index=300, poly_bool=False)
-        point_in_question = max+1
+        point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
 
