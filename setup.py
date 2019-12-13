@@ -10,7 +10,7 @@ setup(
     install_requires=['pandas','numpy','matplotlib','tqdm','sklearn'],
     version='1.0',
     license='Apache License 2.0',
-    description='python library for easy stock analysis and future price estimations. FOR EDUCATIONAL PURPOSES ONLY, NOT INVESTMENT ADVICE'
+    description='python library for easy stock analysis and future price estimations. FOR EDUCATIONAL PURPOSES ONLY, NOT INVESTMENT ADVICE',
     classifiers=[
       'Development Status :: 3 - Alpha',
       'Intended Audience :: Developers',
