@@ -10,6 +10,7 @@ pip3 install stockit
 
 Method 2 (github clone)
 step 1: clone the github repo
+
 step 2: within the cloned directory, run the following command:
 ```
 pip3 install .
