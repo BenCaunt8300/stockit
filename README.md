@@ -38,7 +38,7 @@ import the stockit class
 from stockit import stockit_class
 ```
 
-then lets create an object out of stockit_class, passing it our pandas dataframe
+then lets create an instance of stockit_class, passing it our pandas dataframe
 
 ```python
 
@@ -51,17 +51,15 @@ from here we can do a few things
 1. we can use the polynomial regression feature 
 2. we can use the newly added (as of july 24 2019) moving average feature 
 
-Polynomial Regressor
+Regression analysis 
 ```python
- #next day that we will predict the price of 
+ #next day that we will estimate the price of 
  next = len(data)+1
- #create the polynomial with stockit.train()
- #we can specify the degree of the polynomial and the index
- #the index is just how far back from the end of the data we generate the polynomial from
- #the lower this number the more relevant it is, higher numbers may give you a better picture, dont specify or pass 0 for the entire set
- stockit.train(degree = 10, index = 300)
  
- #make prediction on the next day 
+ # fit the model to the dataset
+ stockit.train(index = 300)
+ 
+ #make estimation on the next day 
  print(stockit.predict(next))
 
 ```
@@ -75,7 +73,7 @@ moving average
  
 ```
 
-Regressor and moving Average 
+Regressuib and moving Average analysis
 ```python
 import pandas as pd 
 from stockit_class import stockit_class
