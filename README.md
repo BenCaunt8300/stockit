@@ -1,5 +1,5 @@
 # stockit
-
+[![Downloads](https://pepy.tech/badge/stockit)](https://pepy.tech/project/stockit)
 stockit is a python class that aids in easy prediction and alaysis of stocks
 
 stockit_class.py is the real star of the show here.  It contains a class that has many tools needed for analysis and prediction of stock or currency prices such as regression and moving average windows.
