@@ -23,7 +23,7 @@ stockit_realtime.py is for experimentation and takes real time data from yahoo a
 
 it will the use that live data from yahoo finance to allow it to calculate a potential climb or fall in stock price and then make appropriate actions on that information
 
-stockits regression usage can be demoed here: <bencaunt1232.pythonanywhere.com>.
+stockits regression usage can be demoed here: (bencaunt1232.pythonanywhere.com)[bencaunt1232.pythonanywhere.com]
 type ```/stockit-app/[stock name]``` to make the estimation
 
 # USAGE:
