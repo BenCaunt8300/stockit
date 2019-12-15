@@ -4,9 +4,9 @@
 # Install: 
 
 Method 1 (pip):
-'''
+```
 pip3 install stockit
-'''
+```
 
 Method 2 (github clone)
 step 1: clone the github repo
