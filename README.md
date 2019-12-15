@@ -73,7 +73,7 @@ moving average
  
 ```
 
-Regressuib and moving Average analysis
+Regression and moving Average analysis
 ```python
 import pandas as pd 
 from stockit_class import stockit_class
