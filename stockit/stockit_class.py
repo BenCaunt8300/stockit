@@ -9,9 +9,8 @@ from statistics import mean
 import warnings
 
 
-#creates stockit class
 class stockit_class():
-    #regressor class init function
+    '''The stockit class is used to analyize time series data with its set of algorithms and methods. Pass in pandas dataframe on init'''
     def __init__(self, data):
         #exception handler for finding the close column of a pandas dataframe
         try:
@@ -39,6 +38,10 @@ class stockit_class():
         
     #poly regressor training function
     def train(self, degree = 10, index = 0, poly_bool = False):
+        '''This method fits the linear regression model to the pandas dataframe.  
+        the degree argument is the degree of the polynomial regressor if the parameter poly_bool is set to True.
+        Index is the number of items starting from the end of the dataset model.
+        '''
         # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
         if index > len(self.data):
             raise ValueError("'index' cannot be greater than the length of your CSV file. ")
@@ -110,6 +113,7 @@ class stockit_class():
             
     #predict method
     def predict(self, target):
+        '''Use linear regression model that was initalized in the .train() method.  target is the index you are predicting'''
         # if the self.reg object is None, this means that train has not been called, therefore we should just call it anyways
         if self.reg is None:
             warnings.warn("""self.reg == None, this most likely means you did not call the .train() method
@@ -130,7 +134,7 @@ class stockit_class():
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
         '''
-        Calculates and graphs moving average given a specified index or 100 by default.  In order to be used, an instance of the stockit class must already be created.
+        Calculates and graphs moving average given a specified index or 100 by default.
         '''
 
         style.use("ggplot")
@@ -217,7 +221,7 @@ class stockit_class():
             plt.savefig(name, dpi = save_dpi)
 
 
-# basically a bunch of examples
+# basically a bunch of examples of how to use the stockit class 
 def main():
 
     #creates pandas dataframe
@@ -268,7 +272,7 @@ def main():
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
         plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
         stockit.moving_avg(index = 100, show_plt = True)
-
+    
     linear_regressor_demo()
 
 if __name__ == '__main__':
