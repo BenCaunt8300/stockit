@@ -8,7 +8,7 @@ setup(
     author_email='bdcaunt@gmail.com',
     packages=['stockit'],
     install_requires=['pandas','numpy','matplotlib','tqdm','sklearn'],
-    version='1.0.3',
+    version='1.0.3.1',
     license='MIT',
     description='python library for easy stock analysis and price estimations',
     classifiers=[
