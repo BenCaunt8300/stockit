@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from matplotlib.pyplot import style
@@ -37,17 +38,25 @@ class stockit_class():
 
         
     #poly regressor training function
-    def train(self, degree = 10, index = 0, poly_bool = False):
+    def train(self, degree = 10, index = 0,SVRbool = False, poly_bool = False):
         '''This method fits the linear regression model to the pandas dataframe.  
-        the degree argument is the degree of the polynomial regressor if the parameter poly_bool is set to True.
+        The degree argument is the degree of the polynomial regressor if the parameter poly_bool is set to True.
         Index is the number of items starting from the end of the dataset model.
+
+        SVRbool is a boolean that when true changes the mode to support vector regression and in some cases can have a better fit 
         '''
         # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
         if index > len(self.data):
             raise ValueError("'index' cannot be greater than the length of your CSV file. ")
-        self.poly_reg_bool = poly_bool
+        # if not using support vector regression, use polynomial / linear regression
+        if SVRbool == False:
+          self.poly_reg_bool = poly_bool
 
-        self.reg = LinearRegression()
+          self.reg = LinearRegression()
+        else:
+          # if using support vector classifaction set proper settings 
+          self.poly_reg_bool = False
+          self.reg = SVR(C=1.0, epsilon=0.2)
 
         #if index is equal to 0 then do things as normally
         if index == 0:
@@ -100,9 +109,11 @@ class stockit_class():
             y = self.y_index
             #creates object from sklearn's LinearRegression() class
             #can be called outside the class with stockit_class.reg
+            
+            
         #only runs if poly_reg_bool is equal to true
         #if so polynomial regression is in use, if not it is linear regression
-        if self.poly_reg_bool:
+        if self.poly_reg_bool and SVRbool == False:
             self.poly = PolynomialFeatures(degree = degree)
             x_poly = self.poly.fit_transform(x)
             self.poly.fit(x_poly, y)
@@ -238,7 +249,7 @@ def main():
 
     def linear_regressor_demo():
         style.use('ggplot')
-        stockit.train(index = 300, poly_bool=False)
+        stockit.train(index = 300, SVRbool = True, poly_bool=False)
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
