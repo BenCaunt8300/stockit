@@ -56,7 +56,7 @@ class stockit_class():
         else:
           # if using support vector classifaction set proper settings 
           self.poly_reg_bool = False
-          self.reg = SVR(C=1.0, epsilon=0.2)
+          self.reg = SVR(kernel='rbf', C=1e1, gamma=0.1)
 
         #if index is equal to 0 then do things as normally
         if index == 0:
@@ -249,7 +249,7 @@ def main():
 
     def linear_regressor_demo():
         style.use('ggplot')
-        stockit.train(index = 300, SVRbool = True, poly_bool=False)
+        stockit.train(index = 150, SVRbool = false, poly_bool=False)
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
