@@ -46,12 +46,13 @@ stockit = stockit_class(data)
 
 ```
 
-from here we can do a few things 
+from here we can do a few things:
+1. Simple linear Regression
+2. Support Vector Regression
+3. Plot Moving Average
 
-1. we can use the polynomial regression feature 
-2. we can use the newly added (as of july 24 2019) moving average feature 
 
-Regression analysis 
+Regression analysis:
 ```python
  #next day that we will estimate the price of 
  next = len(data)+1
@@ -63,8 +64,15 @@ Regression analysis
  print(stockit.predict(next))
 
 ```
+stockit can also use support vector regression to achieve a ighter fit to the data:
+```python 
 
-moving average
+ stockit.train(index = 300, SVRbool = True)
+ print(stockit.predict(next))
+
+```
+
+moving average:
 ```python
 
  #simply call the moving_avg() method of stockit
@@ -73,7 +81,7 @@ moving average
  
 ```
 
-Regression and moving Average analysis
+Regression and Moving Average Analysis
 ```python
 import pandas as pd 
 from stockit_class import stockit_class
