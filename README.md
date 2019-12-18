@@ -1,5 +1,6 @@
 # stockit
 <a href="https://codeclimate.com/github/BenCaunt8300/stockit/maintainability"><img src="https://api.codeclimate.com/v1/badges/9c395b17b6a40f82dd61/maintainability" /></a>
+
 [![Downloads](https://pepy.tech/badge/stockit)](https://pepy.tech/project/stockit)
 # Install: 
 
