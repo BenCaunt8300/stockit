@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
 from matplotlib.pyplot import style
 from statistics import mean
 import warnings
@@ -28,44 +27,41 @@ class stockit_class():
         print("information used for educational purposes,  if used for investment, use at    ")
         print("Ones own risk.  Thank you for using stockit.")
         print("******************************************************************************")
-        #for determining if the train and predict methods are using polynomials or not
-        self.poly_reg_bool = True
-        #for polynomial features class from sklearn
-        self.poly = None
+        # linear or svr regressor
         self.reg = None
-        self.x_index = None # graphing stuff
-        self.y_index = None #graphin stuff,
+        self.x_index = None
+        self.y_index = None
 
-        
-    #poly regressor training function
-    def train(self, degree = 10, index = 0,SVRbool = False, poly_bool = False):
-        '''This method fits the linear regression model to the pandas dataframe.  
-        The degree argument is the degree of the polynomial regressor if the parameter poly_bool is set to True.
+    # fit regression model
+    def train(self, index = 0, SVRbool = False):
+        '''This method fits the linear regression model to the pandas dataframe.
         Index is the number of items starting from the end of the dataset model.
 
-        SVRbool is a boolean that when true changes the mode to support vector regression and in some cases can have a better fit 
+        * SVRbool is a boolean that when true changes the mode to support vector regression and in some cases can have a better fit
+        * you may need to play with index to get it just right
         '''
         # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
         if index > len(self.data):
             raise ValueError("'index' cannot be greater than the length of your CSV file. ")
-        # if not using support vector regression, use polynomial / linear regression
+        # if not using support vector regression, use linear regression
         if SVRbool == False:
-          self.poly_reg_bool = poly_bool
-
-          self.reg = LinearRegression()
+            self.reg = LinearRegression()
         else:
-          # if using support vector classifaction set proper settings 
-          self.poly_reg_bool = False
-          self.reg = SVR(kernel='rbf', C=1e1, gamma=0.1)
+            # fixes weird bug where if the index is too long you get an axis error from sklearn
+            # set the index to 500 if it is too big.
+            if index == 0 or index > 500:
+                warnings.warn("ocasionally a strang bug occurs with SVR when the index is set to 0 or is greater than around 500, setting index to 500...")
+                index = 500
+
+            self.reg = SVR(kernel='rbf', C=1e1, gamma=0.1)
 
         #if index is equal to 0 then do things as normally
         if index == 0:
-            x = []
 
             y = self.data
-            #creates the x or independed variable
-            for i in tqdm(range(len(self.data))):
-                x.append(i)
+            #creates x value for graping
+
+            x = [i for i in tqdm(range(len(self.data)))]
 
             x = np.array(x)
             y = np.array(y)
@@ -104,24 +100,17 @@ class stockit_class():
             #reshape data
             self.x_index = self.x_index.reshape(-1,1)
             self.y_index = self.y_index.reshape(-1,1)
- 
+
             x = self.x_index
             y = self.y_index
             #creates object from sklearn's LinearRegression() class
             #can be called outside the class with stockit_class.reg
-            
-            
-        #only runs if poly_reg_bool is equal to true
-        #if so polynomial regression is in use, if not it is linear regression
-        if self.poly_reg_bool and SVRbool == False:
-            self.poly = PolynomialFeatures(degree = degree)
-            x_poly = self.poly.fit_transform(x)
-            self.poly.fit(x_poly, y)
-        else:
-            #poly_reg_bool is false so using linear regression
-            self.reg.fit(x,y)
+
+
+
+        self.reg.fit(x,y)
         return 1
-            
+
     #predict method
     def predict(self, target):
         '''Use linear regression model that was initalized in the .train() method.  target is the index you are predicting'''
@@ -133,14 +122,12 @@ class stockit_class():
             self.train()
         pred = np.array(target)
         pred = pred.reshape(1,-1)
-        if self.poly_reg_bool:
-            pred_poly = self.poly.fit_transform(pred)
-            pred  = pred_poly
-            
-        
+
+
+
         output = self.reg.predict(pred)
         return output[0]
- 
+
     #moving average, input the number of time stamps with the 'index' variable
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
@@ -153,9 +140,7 @@ class stockit_class():
         #always document your code kids
         #oh yea, this is some moving average thing lol
         #it goes back x days, finds the average, graphs it
-        #pretty lame but simpler than a neural network
-        # **laughs in shape errors**
-        
+
         #basically this function takes in the input of a list and finds the average of it,
         #the only difference from the standard mean function is it has the optimization of not having to calculate the length of the datset each time
         #the length of the data that is being average is decided by the index variable
@@ -165,12 +150,10 @@ class stockit_class():
         #for graphing the real price i think lol
         x_data_graphing = [i for i in range(len(data))]
 
-        x = []
-
         #calculate moving average for duration of the argument index
 
         #list of all the moving average values
-        #fill the first 'range(index)' with 0s to graph the first part of the moving average where the full average cannot be calculated 
+        #fill the first 'range(index)' with 0s to graph the first part of the moving average where the full average cannot be calculated
         moving_avg_values = [0 for fill in range(index)]
 
 
@@ -194,21 +177,12 @@ class stockit_class():
                 moving_avg_values.append(mean(index_values))
             except:
                 pass
-                #dont worry about this
-                #print("stuff happens, moving on")
-                #get out of here lol
-                #we've gone as far as we can, stop here, youre wasting CPU time
-
 
         #fill in the x values for graphing
-        for length_mov_avg_val in range(len(moving_avg_values)):
-            x.append(length_mov_avg_val)
 
-        #debug stuff, uncomment if you need lol
+        x = [length_mov_avg_val for length_mov_avg_val in range(len(moving_avg_values))]
 
-        #print(f"len(x) = {len(x)}")
-        #print(f"len(moving_avg_values) = {len(moving_avg_values)}")
-
+        # saves figure to disk if save_plt is set to True
         if save_plt:
             x = pd.DataFrame(x)
             moving_avg_values = pd.DataFrame(moving_avg_values)
@@ -220,7 +194,7 @@ class stockit_class():
 
         plt.plot(x, moving_avg_values, label = f"moving average {index}")
 
-        #the show_real variable is a variable that when true, plots the true stock data
+        #When true plot the stock data,  disable if plotting many moving average instances ontop of eachother
         if show_real:
             plt.plot(x_data_graphing, data, label = "real values")
 
@@ -232,7 +206,7 @@ class stockit_class():
             plt.savefig(name, dpi = save_dpi)
 
 
-# basically a bunch of examples of how to use the stockit class 
+# basically a bunch of examples of how to use the stockit class
 def main():
 
     #creates pandas dataframe
@@ -249,7 +223,7 @@ def main():
 
     def linear_regressor_demo():
         style.use('ggplot')
-        stockit.train(index = 150, SVRbool = false, poly_bool=False)
+        stockit.train(index = 600, SVRbool = False)
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
@@ -268,7 +242,7 @@ def main():
 
     def stockit_demo():
         style.use('ggplot')
-        stockit.train(degree = 10, index=300, poly_bool=False)
+        stockit.train(degree = 10, index=300)
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
@@ -283,7 +257,7 @@ def main():
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
         plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
         stockit.moving_avg(index = 100, show_plt = True)
-    
+
     linear_regressor_demo()
 
 if __name__ == '__main__':
