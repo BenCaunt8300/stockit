@@ -64,7 +64,7 @@ Regression analysis:
  print(stockit.predict(next))
 
 ```
-stockit can also use support vector regression to achieve a ighter fit to the data:
+stockit can also use support vector regression to achieve a tighter fit to the data:
 ```python 
 
  stockit.train(index = 300, SVRbool = True)
