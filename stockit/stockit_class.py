@@ -8,7 +8,6 @@ from matplotlib.pyplot import style
 from statistics import mean
 import warnings
 
-
 class stockit_class():
     '''The stockit class is used to analyize time series data with its set of algorithms and methods. Pass in pandas dataframe on init'''
     def __init__(self, data):

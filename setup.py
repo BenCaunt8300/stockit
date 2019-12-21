@@ -3,12 +3,12 @@ from setuptools import setup
 setup(
     name='stockit',
     url='https://github.com/BenCaunt8300/stockit',
-    download_url = 'https://github.com/BenCaunt8300/stockit/archive/v1.0.4.tar.gz',
+    download_url = 'https://github.com/BenCaunt8300/stockit/archive/v1.0.5.tar.gz',
     author='Ben Caunt',
     author_email='bdcaunt@gmail.com',
     packages=['stockit'],
-    install_requires=['pandas','numpy','matplotlib','tqdm','sklearn'],
-    version='1.0.4',
+    install_requires=['pandas','numpy','matplotlib','tqdm','sklearn','pandas_datareader'],
+    version='1.0.5',
     license='Apache 2.0',
     description='Python module containing a bundle of algorithms for financial analysis and future stock price estimations.',
     classifiers=[
