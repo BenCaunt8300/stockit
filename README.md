@@ -24,10 +24,22 @@ stockit is a python module that aids in easy price estimation and alaysis of sto
 Stockit is a python object that on initailization requires a Pandas dataframe containing historic stock prices.  
 Stockit is designed to work with the close price and searches for a close column in the dataframe
 
+stockit has the ability to download stock information directly from yahoo finance.
+```python
+from stockit import downloadData, returnData
+# downloads data from yahoo finance and stores it as a CSV
+downloaded = downloadData("NVDA")
+
+# downloads data from yahoo finance and returns it as a pandas dataframe
+data = returnData("NVDA")
+
+
+```
+
 stockits regression usage can be demoed here: [bencaunt1232.pythonanywhere.com]
 type ```/stockit-app/[stock name]``` to make the estimation
 
-# USAGE:
+# stockit object usage :
 
 get stock data with Close/close column from a csv or other file as a pandas dataframe
 ```python
