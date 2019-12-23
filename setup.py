@@ -8,7 +8,7 @@ setup(
     author_email='bdcaunt@gmail.com',
     packages=['stockit'],
     install_requires=['pandas','numpy','matplotlib','tqdm','sklearn','pandas_datareader'],
-    version='1.0.5',
+    version='1.0.6',
     license='Apache 2.0',
     description='Python module containing a bundle of algorithms for financial analysis and future stock price estimations.',
     classifiers=[
