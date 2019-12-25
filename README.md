@@ -39,6 +39,8 @@ data = returnData("NVDA")
 stockits regression usage can be demoed here: [bencaunt1232.pythonanywhere.com]
 type ```/stockit-app/[stock name]``` to make the estimation
 
+stoockits regression algorithms are implemented using sci-kit learn. More information can be found here: www.scikit-learn.org
+
 # stockit object usage :
 
 get stock data with Close/close column from a csv or other file as a pandas dataframe
