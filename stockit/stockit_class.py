@@ -5,7 +5,7 @@ from tqdm import tqdm
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 from matplotlib.pyplot import style
-from benReg import SSRR
+from stockit import SSRR
 from statistics import mean
 import warnings
 
