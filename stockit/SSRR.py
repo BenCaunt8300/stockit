@@ -83,8 +83,6 @@ class SSRR:
             # final prediction with scaled slope
             prediction = fabs((self.slopeAvg*i)+self.b) / slopeScale
 
-            plt.plot(predicted)
-            plt.show()
             return prediction
 
 
