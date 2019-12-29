@@ -79,15 +79,19 @@ Regression analysis:
  print(stockit.predict(next))
 
 ```
-stockit can also use support vector regression to achieve a tighter fit to the data:
+Stockit can also use support vector regression to achieve a tighter fit to the data:
 ```python 
 
  stockit.train(index = 300, SVRbool = True)
  print(stockit.predict(next))
 
 ```
+stockit also has a custom regression model known as SSRR that is a modified version of the linear regression algorithim with randomness. 
+```python
+stockit.train(SSRRbool = True)
+```
 
-moving average:
+Moving Average Analysis:
 ```python
 
  #simply call the moving_avg() method of stockit
@@ -107,3 +111,5 @@ print(stockit.predict(100))
 stockit.moving_avg(index = 35)
 
 ```
+
+Please use stockit for educational purposes only.  Ben Caunt is not liable for damaged caused by the usage of this product.  Use at your own risk.

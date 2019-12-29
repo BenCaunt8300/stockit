@@ -5,6 +5,7 @@ from tqdm import tqdm
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 from matplotlib.pyplot import style
+from benReg import SSRR
 from statistics import mean
 import warnings
 
@@ -30,22 +31,34 @@ class stockit_class():
         self.reg = None
         self.x_index = None
         self.y_index = None
+        self.customTrain = None
 
     # fit regression model
-    def train(self, index = 0, SVRbool = False):
+    def train(self, index = 0, SVRbool = False, SSRRbool = False):
         '''This method fits the linear regression model to the pandas dataframe.
         Index is the number of items starting from the end of the dataset model.
 
         * SVRbool is a boolean that when true changes the mode to support vector regression and in some cases can have a better fit
         * you may need to play with index to get it just right
+
+        * SSRRbool when true uses the stockit custom serialized slope randomized regression algorithm
+        * overidden by SVRbool
         '''
+        # determines if using sklearn model or custom model
+        if SSRRbool == False:
+            self.customTrain = False
+        elif SSRRbool == False or SVRbool == True:
+            self.customTrain = False
+        elif SSRRbool == True:
+            self.customTrain = True
+
+        #print("self.customTrain = {} {}".format(self.customTrain, type(self.customTrain)))
+
         # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
         if index > len(self.data):
             raise ValueError("'index' cannot be greater than the length of your CSV file. ")
-        # if not using support vector regression, use linear regression
-        if SVRbool == False:
-            self.reg = LinearRegression()
-        else:
+        # use support vector regression
+        if SVRbool:
             # fixes weird bug where if the index is too long you get an axis error from sklearn
             # set the index to 500 if it is too big.
             if index == 0 or index > 500:
@@ -53,7 +66,12 @@ class stockit_class():
                 index = 500
 
             self.reg = SVR(kernel='rbf', C=1e1, gamma=0.1)
-
+        # use SSRR algorithm
+        elif SSRRbool:
+            self.reg = SSRR()
+        # if no algorithm specified use linear regression
+        else:
+            self.reg = LinearRegression()
         #if index is equal to 0 then do things as normally
         if index == 0:
 
@@ -106,8 +124,14 @@ class stockit_class():
             #can be called outside the class with stockit_class.reg
 
 
-
-        self.reg.fit(x,y)
+        # if using sklearn model
+        if self.customTrain == False:
+            self.reg.fit(x,y)
+        else:
+            #print(y.shape)
+            #print(y)
+            #print(f"y len is {len(y)}")
+            self.reg.fit(y)
         return 1
 
     #predict method
@@ -119,13 +143,15 @@ class stockit_class():
             automatically calling train() method
             manually call the train() method for added options""")
             self.train()
-        pred = np.array(target)
-        pred = pred.reshape(1,-1)
-
+        if self.customTrain == False:
+            pred = np.array(target)
+            pred = pred.reshape(1,-1)
+        else:
+            pred = target
 
 
         output = self.reg.predict(pred)
-        return output[0]
+        return output
 
     #moving average, input the number of time stamps with the 'index' variable
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
