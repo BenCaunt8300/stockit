@@ -35,10 +35,10 @@ class testStockit(unittest.TestCase):
     # test training of SSRR custom model
     def test_SSRRTrain(self):
         stockit_instance = stockit_class(data)
-
+        print(data.close.tail())
         self.assertEqual(stockit_instance.train(index=100,SSRRbool=True),1)
         self.assertEqual(stockit_instance.train(index=0,SSRRbool=True),1)
+        # test if predicting on an indicie less than the max results in output equal to known indicie
+        self.assertEqual(stockit_instance.predict(dataLength - 10), data['close'][len(data)-10])
         # make sure predicting yields no errors
         print(stockit_instance.predict(dataLength + 10))
-
-        print(stockit_instance.predict(dataLength - 10))
