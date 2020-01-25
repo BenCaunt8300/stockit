@@ -19,7 +19,7 @@ def returnData(stock_ticket):
         df = web.DataReader(stock_ticket, 'yahoo', start, end)
         return df
     except:
-        raise ValueError("yahoo finance cannot find ticket named '{}'".format(stock_ticket))
+        raise ValueError(f"yahoo finance cannot find ticket named '{stock_ticket}'")
 
 
 

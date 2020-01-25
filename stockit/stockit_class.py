@@ -33,7 +33,6 @@ class stockit_class():
         self.y_index = None
         self.customTrain = None
 
-    # fit regression model
     def train(self, index = 0, SVRbool = False, SSRRbool = False):
         '''This method fits the linear regression model to the pandas dataframe.
         Index is the number of items starting from the end of the dataset model.
@@ -52,7 +51,7 @@ class stockit_class():
         elif SSRRbool == True:
             self.customTrain = True
 
-        #print("self.customTrain = {} {}".format(self.customTrain, type(self.customTrain)))
+
 
         # if the index is greater than the length of the data raise an error because the linear regressor should not properly be able to train
         if index > len(self.data):
@@ -134,7 +133,6 @@ class stockit_class():
             self.reg.fit(y)
         return 1
 
-    #predict method
     def predict(self, target):
         '''Use linear regression model that was initalized in the .train() method.  target is the index you are predicting'''
         # if the self.reg object is None, this means that train has not been called, therefore we should just call it anyways
@@ -153,7 +151,6 @@ class stockit_class():
         output = self.reg.predict(pred)
         return output
 
-    #moving average, input the number of time stamps with the 'index' variable
     def moving_avg(self, index = 100, show_real = True, show_plt = True, save_plt = False, name = "name", save_index = 90, save_dpi = 800):
 
         '''
@@ -169,7 +166,6 @@ class stockit_class():
         #basically this function takes in the input of a list and finds the average of it,
         #the only difference from the standard mean function is it has the optimization of not having to calculate the length of the datset each time
         #the length of the data that is being average is decided by the index variable
-
         data = self.data
 
         #for graphing the real price i think lol
@@ -230,25 +226,51 @@ class stockit_class():
             plt.legend()
             plt.savefig(name, dpi = save_dpi)
 
+    def plotData(self,show_plt = True,save_plt = True, name = "", save_dpi = 900):
+        '''
+        simply plots the data of the pandas dataframe 'self.data' using matplotlib.pyplot
+
+        method can
+        1. Display plot on screen
+        2. Save plot to disk
+        '''
+
+        # generate plot
+        plt.plot(self.data,label = f"{name} Price")
+
+        # y axis label
+        plt.ylabel("Price")
+        plt.xlabel("Date")
+        # show plot
+        if show_plt:
+            plt.legend()
+            plt.show()
+        # save plot to disk
+        if save_plt:
+            plt.legend()
+            plt.savefig(name, dpi = save_dpi)
+
+
+
 
 # basically a bunch of examples of how to use the stockit class
 def main():
 
     #creates pandas dataframe
-    stock = 'NVDA'
-
-    df = pd.read_csv("NVDA.csv")
+    stock = 'TSLA'
+    df = pd.read_csv("TSLA.csv")
+    df = df.Close
     #the last index of a dataset is equal to its length - ya bois law
     data_len = len(df)
     #prints the length of the dataset
-    print("df length is: {0}".format(len(df)))
+    print(f"df length is: {len(df)}")
 
     stockit = stockit_class(df)
 
 
     def linear_regressor_demo():
         style.use('ggplot')
-        stockit.train(index = 600, SVRbool = False)
+        stockit.train()
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
@@ -256,7 +278,7 @@ def main():
         plt.title(stock)
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
         plt.plot(stockit.x_index, stockit.y_index, label= "real")
-        plt.scatter([point_in_question], [point_prediction], label = 'stockit.predict[{0}]'.format(point_in_question))
+        plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
         plt.legend()
         plt.show()
 
@@ -267,23 +289,22 @@ def main():
 
     def stockit_demo():
         style.use('ggplot')
-        stockit.train(degree = 10, index=300)
+        stockit.train(index=250)
         point_in_question = data_len+1
         point_prediction = stockit.predict(point_in_question)
         print(point_prediction)
-
-
-        #creates the x or independed variable
 
         predictions = stockit.reg.predict(np.sort(stockit.x_index, axis = 0))
 
 
         plt.title(stock)
         plt.plot(stockit.x_index, predictions, label = "reg predictions")
-        plt.scatter([point_in_question], [point_prediction], label = f'stockit.predict[{point_in_question}]')
-        stockit.moving_avg(index = 100, show_plt = True)
+        plt.scatter([point_in_question], [point_prediction], label = f'stockit regression of day: {point_in_question}')
+        stockit.moving_avg(index = 25, show_plt = False)
+        plt.savefig("stockit example.png",dpi=1200)
 
-    linear_regressor_demo()
+
+    stockit_demo()
 
 if __name__ == '__main__':
     main()
