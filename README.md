@@ -2,16 +2,18 @@
 
 stockit is a python module that aids in easy price estimation and analysis of stock prices
 
-Stockit is a python object that on initialization requires a Pandas dataframe containing historic stock prices.  
-Stockit is designed to work with the close price and searches for a close column in the dataframe
-
-stockit has the ability to download stock information directly from yahoo finance.
 
 <a href="https://codeclimate.com/github/BenCaunt8300/stockit/maintainability"><img src="https://api.codeclimate.com/v1/badges/9c395b17b6a40f82dd61/maintainability" /></a>
 
 [![Downloads](https://pepy.tech/badge/stockit)](https://pepy.tech/project/stockit)
 
 ![stockit example](https://user-images.githubusercontent.com/19732253/73117052-2a4cf500-3f0e-11ea-9cef-3d471c7fc326.png)
+
+
+Stockit is a python object that on initialization requires a Pandas dataframe containing historic stock prices.  
+Stockit is designed to work with the close price and searches for a close column in the dataframe
+
+stockit has the ability to download stock information directly from yahoo finance.
 
 # Install:
 
