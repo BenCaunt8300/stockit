@@ -46,7 +46,7 @@ data = returnData("NVDA")
 stockits regression usage can be demoed here: [bencaunt1232.pythonanywhere.com]
 type ```/stockit-app/[stock name]``` to make the estimation
 
-stoockits regression algorithms are implemented using sci-kit learn. More information can be found here: www.scikit-learn.org
+stockits regression algorithms are implemented using sci-kit learn. More information can be found here: www.scikit-learn.org
 
 # stockit object usage :
 
@@ -58,6 +58,14 @@ data = pd.read('example.csv')
 import the stockit class
 ```python
 from stockit import stockit_class
+```
+
+OR download the data directly from yahoo finance using stockit:
+
+```python
+from stockit import returnData
+# gets stock price history from yahoo finance from the past 5 years
+data = returnData("TSLA", years = 5)
 ```
 
 then lets create an instance of stockit_class, passing it our pandas dataframe
