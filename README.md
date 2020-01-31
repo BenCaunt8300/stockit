@@ -124,7 +124,7 @@ Moving Average Analysis:
 Regression and Moving Average Analysis
 ```python
 import pandas as pd
-from stockit_class import stockit_class
+from stockit import stockit_class
 data = pd.read_csv('example.csv')
 stockit = stockit_class(data)
 stockit.train()
