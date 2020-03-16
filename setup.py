@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='stockit',
     url='https://github.com/BenCaunt8300/stockit',
-    download_url = 'https://github.com/BenCaunt8300/stockit/archive/v1.0.9.tar.gz',
+    download_url = 'https://github.com/BenCaunt8300/stockit/archive/v1.0.9.1.tar.gz',
     author='Ben Caunt',
     author_email='bdcaunt@gmail.com',
     packages=['stockit'],
