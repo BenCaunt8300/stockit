@@ -75,10 +75,10 @@ class SSRR:
                 print(f"i {i}")
                 print(f"b {self.b}")
                 # re-calculate prediction
-                prediction = fabs((self.slopeAvg*i)+self.b) / slopeScale
+                prediction = fabs((self.slopeAvg*x)+self.b) / slopeScale
                 predicted.append(prediction)
             # final prediction with scaled slope
-            prediction = fabs((self.slopeAvg*i)+self.b) / slopeScale
+            prediction = fabs((self.slopeAvg*x)+self.b) / slopeScale
 
             return prediction
     def addMAD(self, dataPoint):
@@ -121,7 +121,7 @@ def main():
     data = data.close
     regressor = SSRR()
     regressor.fit(data)
-    # predict 50 days out 
+    # predict 50 days out
     print(regressor.predict(len(data) + 50))
 
 if __name__ == '__main__':

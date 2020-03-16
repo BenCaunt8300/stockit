@@ -61,7 +61,7 @@ class stockit_class():
             # fixes weird bug where if the index is too long you get an axis error from sklearn
             # set the index to 500 if it is too big.
             if index == 0 or index > 500:
-                warnings.warn("ocasionally a strang bug occurs with SVR when the index is set to 0 or is greater than around 500, setting index to 500...")
+                warnings.warn("ocasionally a strange bug occurs with SVR when the index is set to 0 or is greater than around 500, setting index to 500...")
                 index = 500
 
             self.reg = SVR(kernel='rbf', C=1e1, gamma=0.1)

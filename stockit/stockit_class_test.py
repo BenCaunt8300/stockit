@@ -1,12 +1,11 @@
 import unittest
 from stockit_class import stockit_class
+from dataGraber import returnData
 from pandas import read_csv
 import numpy as np
 
-data = read_csv("TSLA.csv")
+data = returnData("TSLA")
 dataLength = len(data)
-
-
 class testStockit(unittest.TestCase):
 
     # test if the output of the stockit regressor is a numpy array
@@ -42,3 +41,4 @@ class testStockit(unittest.TestCase):
         #self.assertEqual(stockit_instance.predict(dataLength - 10), data['Close'][len(data)-10])
         # make sure predicting yields no errors
         print(stockit_instance.predict(dataLength + 10))
+unittest.main()
