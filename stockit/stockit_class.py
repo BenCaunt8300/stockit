@@ -44,9 +44,7 @@ class stockit_class():
         * overidden by SVRbool
         '''
         # determines if using sklearn model or custom model
-        if SSRRbool == False:
-            self.customTrain = False
-        elif SSRRbool == False or SVRbool == True:
+        if SSRRbool == False or SVRbool == True:
             self.customTrain = False
         elif SSRRbool == True:
             self.customTrain = True
